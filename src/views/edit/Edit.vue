@@ -137,7 +137,7 @@ const addDaily = async () => {
     <div class="mx-auto w-full min-h-fit ">
       <v-md-editor
           left-toolbar="undo redo clear | h bold italic strikethrough quote | ul ol table hr | link image code | save | emoji"
-          mode="edit"
+          mode="editable"
           height="30rem"
           v-model="text"
           :disabled-menus="[]"
