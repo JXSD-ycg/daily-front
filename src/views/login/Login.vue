@@ -4,8 +4,9 @@ import {ElMessage} from "element-plus";
 import {onMounted, ref} from 'vue'
 import {useRouter} from "vue-router";
 import {getCodeByteAPI, loginAPI} from "../../apis/login.js";
-import LayoutHeader from "../layout/components/LayoutHeader.vue";
+import {useUserStore} from "../../stores/userStore.js";
 
+const userStore = useUserStore();
 const form = ref({
   email: '3044254475@qq.com',
   password: 'ycg',
@@ -38,18 +39,13 @@ const doLogin = () => {
     // valid: 所有表单验证都通过才为true
     if (valid) {
       // 发送登录请求
-      const res = await loginAPI({email, password, picCode, codeId} );
-      if (res.code === 1) {
+      if (userStore.login({email, password, picCode, codeId})) {
         ElMessage.success("登录成功")
-
-        // todo 登录成功  将用户token写入到请求头  将用户信息存到userStore
-
-        // 2.跳转首页 replace 替代当前页面 防止用户输入错误不停的放回登录页面
-        await router.replace({path: '/'})
+        // 跳转页面
+        await router.push("/")
       } else {
         ElMessage.error("登录失败")
       }
-
     }
   })
 }

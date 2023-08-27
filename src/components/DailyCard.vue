@@ -1,7 +1,6 @@
 <script setup>
 import {defineProps, onMounted, ref} from "vue";
-import {getPublicDailyAPI} from "../apis/home.js";
-import {getUserAPI} from "../apis/user.js";
+
 
 // todo 日记模型还为确定
 defineProps({
@@ -21,8 +20,8 @@ defineProps({
 </script>
 
 <template>
-  <div class="px-2 py-5 flex items-center justify-between">
-    <div class="flex flex-col items-center space-y-4">
+  <div class="px-2 py-3 ">
+    <div class="flex flex-col items-center space-y-1">
       <div class="flex items-center self-start">
         <svg class="w6 h-6 pr-3" viewBox="0 0 1024 1024">
           <path
@@ -42,26 +41,27 @@ defineProps({
 
         <span class="text-gray-500">
            [{{ daily.bookTitle === 'default' ? '默认' : daily.bookTitle }} 日记]
-        [天气: 晴]
-        [心情: 喜]
-        [地点: 广州]
+        [天气: {{daily.weather}}]
+        [心情: {{daily.mood}}}]
+        [地点: {{daily.place}}]
         </span>
 
       </div>
-      <div class="h-auto pl-1 pr-5 self-start w-full ">
-        {{ daily.content }}
+
+      <div class="w-full flex items-center py-1">
+          <p class=" flex items-center w-4/5 leading-loose self-start pl-1 pr-5 indent-5">  {{ daily.content }}   </p>
+         <img class=" w-24 h-24 w-1/4 self-start" :src="daily.image">
       </div>
+
       <div class="flex self-start">
         <span class="text-gray-500">
            <span class="px-1"> {{ new Date(daily.createTime).toLocaleString() }}</span>
         <span class="px-1">  {{ daily.likes }}点赞</span>
         <span class="px-1"> {{ daily.views }}观看</span>
         </span>
-
-
       </div>
     </div>
-    <img class=" my-3 w-24 h-24" :src="daily.image">
+
   </div>
 </template>
 

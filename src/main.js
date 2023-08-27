@@ -13,6 +13,13 @@ import '@kangc/v-md-editor/lib/theme/style/vuepress.css';
 
 import Prism from 'prismjs';
 
+import createEmojiPlugin from '@kangc/v-md-editor/lib/plugins/emoji/index';
+import '@kangc/v-md-editor/lib/plugins/emoji/emoji.css';
+
+
+// 导入表情包组件
+VueMarkdownEditor.use(createEmojiPlugin());
+
 VueMarkdownEditor.use(vuepressTheme, {
   Prism,
 });

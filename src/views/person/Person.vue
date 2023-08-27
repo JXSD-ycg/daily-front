@@ -4,6 +4,7 @@ import {useRoute} from "vue-router";
 import {ref,onMounted} from 'vue'
 import {getUserPublicDailyAPI} from "../../apis/person.js";
 import {getUserAPI} from "../../apis/user.js";
+import {useUserStore} from "../../stores/userStore.js";
 
 import UserBox from "./components/UserBox.vue";
 import UserPublicDaily from "./components/UserPublicDaily.vue";
@@ -25,18 +26,14 @@ const getUserPublicDaily = async () => {
 }
 
 const user = ref({});
-// 查询个人信息
 const getUserInfo = async () => {
-  const res = await getUserAPI( route.params.id);
-  console.log(res)
+  const res = await getUserAPI(route.params.id);
   user.value = res.data
 }
 
-
-
 onMounted(() => {
   getUserPublicDaily()
-  getUserInfo()
+   getUserInfo()
 })
 
 </script>

@@ -6,7 +6,7 @@ import LayoutHeader from "./components/LayoutHeader.vue";
 
 <template>
   <div class="flew flex-col  ">
-    <div class="top-0 fixed w-full flex justify-center header-color shadow-gray-50 shadow-lg">
+    <div class="z-50 top-0 fixed w-full flex justify-center header-color shadow-gray-50 shadow-lg">
       <LayoutHeader></LayoutHeader>
     </div>
     <div class="mt-20 w-full flex items-center justify-center">
