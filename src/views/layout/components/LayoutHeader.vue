@@ -33,15 +33,15 @@ console.log(route.name)
       </div>
     </div>
 
-    <div class="flex items-center">
+    <div class="flex items-center space-x-5">
 
-      <div class="px-8">
+      <div class="">
         <router-link :class="{active: route.name === 'login'}" class="hover:border-b-2" to="/login">
           登录
         </router-link>
-
       </div>
-      <div class="px-8">
+      <div class="border border-white  h-6"></div>
+      <div class="">
         <router-link :class="{active: route.name === '注册'}" class="hover:border-b-2" to="/register">
           注册
         </router-link>
