@@ -6,6 +6,8 @@ import Edit from '../views/edit/Edit.vue'
 import Login from '../views/login/Login.vue'
 import Admin from '../views/admin/Admin.vue'
 import Register from '../views/register/Register.vue'
+import UserHome from '../views/user/UserHome.vue'
+import Account from '../views/account/Account.vue'
 
 
 const router = createRouter({
@@ -27,6 +29,11 @@ const router = createRouter({
           component: Person
         },
         {
+          path: '/userHome',
+          name: 'userHome',
+          component: UserHome
+        },
+        {
           path: '/edit',
           name: 'edit',
           component: Edit
@@ -35,6 +42,11 @@ const router = createRouter({
           path: '/login',
           name: 'login',
           component: Login
+        },
+        {
+          path: '/account',
+          name: 'account',
+          component: Account
         },
         {
           path: '/admin',

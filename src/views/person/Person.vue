@@ -4,15 +4,13 @@ import {useRoute} from "vue-router";
 import {ref,onMounted} from 'vue'
 import {getUserPublicDailyAPI} from "../../apis/person.js";
 import {getUserAPI} from "../../apis/user.js";
-import {useUserStore} from "../../stores/userStore.js";
 
 import UserBox from "./components/UserBox.vue";
 import UserPublicDaily from "./components/UserPublicDaily.vue";
 
 // todo 完成个人页
 
-const route = useRoute();
-
+sessionStorage
 // 根据用户id查询 改用户下面的所有 public文章
 const list = ref([]);
 const total = ref(0);

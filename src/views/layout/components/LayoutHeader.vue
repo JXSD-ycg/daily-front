@@ -29,23 +29,29 @@ console.log(route.name)
         <router-link :class="{active: route.name === 'edit'}" class="hover:border-b-2 " to="/edit">
           开始记日记
         </router-link>
+        <router-link :class="{active: route.name === 'userHome'}" class="hover:border-b-2 " to="/userHome">
+          个人主页
+        </router-link>
 
       </div>
     </div>
 
     <div class="flex items-center space-x-5">
-
       <div class="">
+        <router-link :class="{active: route.name === 'account'}" class="hover:border-b-2" to="/account">
+          账号设置
+        </router-link>
+      </div>
+        <div class="">
         <router-link :class="{active: route.name === 'login'}" class="hover:border-b-2" to="/login">
           登录
         </router-link>
       </div>
-      <div class="border border-white  h-6"></div>
+
       <div class="">
         <router-link :class="{active: route.name === '注册'}" class="hover:border-b-2" to="/register">
           注册
         </router-link>
-
       </div>
     </div>
 

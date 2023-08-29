@@ -5,6 +5,7 @@ import {getUserAPI} from "../apis/user.js";
 
 export const useUserStore = defineStore('user', () => {
 
+  const loginUserInfo = ref({});
     // 用户登录 登录成功, 将token存入localstorage
     const login = async ({email, password, picCode, codeId}) => {
       const res = await loginAPI({email, password, picCode, codeId});
@@ -29,8 +30,9 @@ export const useUserStore = defineStore('user', () => {
 
     }
 
+
     return {
-      login
+      login,
     }
   },
 

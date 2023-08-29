@@ -94,10 +94,6 @@ onMounted(() => getCode())
           <el-button size="large" color="#009eff" @click="doLogin">登录</el-button>
         </div>
 
-
-
-
-
       </el-form>
 
     </div>

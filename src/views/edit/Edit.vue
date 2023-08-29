@@ -1,7 +1,8 @@
 <script setup>
 import {ElMessage} from "element-plus";
-import {ref} from "vue";
-import {addDailyAPI, uploadImageAPI} from "../../apis/edit.js";
+import {onMounted, ref} from "vue";
+import {useRoute} from "vue-router";
+import {addDailyAPI, getOneDailyAPI, updateDailyInfoAPI, uploadImageAPI} from "../../apis/edit.js";
 import router from "../../router/index.js";
 
 const imageUrl = ref('');
@@ -53,9 +54,10 @@ const mood = ref('')
 const weather = ref('')
 // 城市
 const place = ref('')
-
-const isPublic = ref('1')
-
+const isPublic = ref('0')
+const views = ref(0)
+const likes = ref(0)
+const loginUserInfo = JSON.parse(sessionStorage.getItem("loginUserInfo"));
 // 发送日记
 const addDaily = async () => {
   // 先校验参数
@@ -63,7 +65,6 @@ const addDaily = async () => {
     ElMessage.error('日记内容不为空')
     return;
   }
-  const loginUserInfo = JSON.parse(sessionStorage.getItem("loginUserInfo"));
   const daily = {
     "userId": loginUserInfo.id,
     "username": loginUserInfo.username,
@@ -76,8 +77,8 @@ const addDaily = async () => {
     "isPublic": isPublic.value,
     // 页面展示只要存放一张图片
     "image": imageUrl.value,
-    "views": 0,
-    "likes": 0,
+    "views": views.value,
+    "likes": likes.value,
   }
   const res = await addDailyAPI(daily);
   if (res.code === 1) {
@@ -88,14 +89,64 @@ const addDaily = async () => {
   }
 }
 
+// 查询日记信息
+const route = useRoute();
+const dailyId = route.query.id
+// 根据日记id查询日记  route传参 传日记的话url路径太大了
+const getOneDaily = async () => {
+  console.log("日记id:", dailyId)
+  const res = await getOneDailyAPI(dailyId);
+  if (res.code === 1) {
+    text.value = res.data.content
+    book.value = res.data.bookTitle
+    isPublic.value = res.data.isPublic+ ""
+    mood.value = res.data.mood
+    weather.value = res.data.weather
+    place.value = res.data.place
+    views.value = res.data.views
+    likes.value = res.data.likes
+  }
+}
 
+// 修改日记信息
+const updateDailyInfo = async () => {
+  const data = {
+    "id":dailyId,
+    "userId": loginUserInfo.id,
+    "username": loginUserInfo.username,
+    "dailyTitle": "",
+    "bookTitle": "默认日记本",
+    "mood": mood.value,
+    "weather": weather.value,
+    "place": place.value,
+    "content": text.value,
+    "isPublic": isPublic.value,
+    // 页面展示只要存放一张图片
+    "image": imageUrl.value,
+    "views":  views.value,
+    "likes": likes.value,
+  }
+  const res = await updateDailyInfoAPI(data);
+  if (res.code === 1) {
+    ElMessage.success("修改日记成功!")
+    await router.push("/userHome")
+  }
+}
+
+onMounted(() => {
+  if (dailyId) {
+    getOneDaily()
+  }
+})
 
 </script>
 
 <template>
+
   <div class="flex-col w-2/3 mb-3 space-y-6">
     <div class="total-text-color font-semibold text-3xl pb-3 border-b-2 border-blue-50 ">
-      开始记录你的今天吧
+      <div v-if="dailyId">修改日记</div>
+      <div v-else>开始记录你的今天吧</div>
     </div>
 
     <div>
@@ -153,12 +204,15 @@ const addDaily = async () => {
             <el-radio label="1" size="large">能</el-radio>
             <el-radio label="0" size="large">不能</el-radio>
           </el-radio-group>
-        <span class="pl-10">您还能输入{{10000 - text.length}}字</span>
+        <span class="pl-10">您还能输入{{ 10000 - text.length }}字</span>
       </span>
     </div>
 
     <div class="flex items-center justify-center">
-      <el-button type="primary" @click="addDaily" color="#4798b2" size="large">
+      <el-button v-if="dailyId" type="primary" @click="updateDailyInfo" color="#4798b2" size="large">
+        <span class="text-white w-12 h-8 flex items-center justify-center">确认修改</span>
+      </el-button>
+      <el-button v-else type="primary" @click="addDaily" color="#4798b2" size="large">
         <span class="text-white w-12 h-8 flex items-center justify-center">完成</span>
       </el-button>
     </div>
