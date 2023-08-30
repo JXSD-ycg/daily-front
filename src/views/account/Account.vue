@@ -3,11 +3,14 @@
 import 'element-plus/es/components/message/style/css'
 import {ElMessage} from "element-plus";
 import {onMounted, ref} from 'vue'
+import {updateUserInfo} from "../../apis/account.js";
 import {uploadImageAPI} from "../../apis/edit.js";
 import router from "../../router/index.js";
+import {useUserStore} from "../../stores/userStore.js";
 
+const userStore = useUserStore();
+const loginUserInfo = userStore.getLoginUserInfo()
 
-const loginUserInfo = JSON.parse(sessionStorage.getItem("loginUserInfo"))
 const form = ref({
   username: loginUserInfo.username,
   introduce: loginUserInfo.introduce,
@@ -31,23 +34,35 @@ const rules = {
 }
 
 const formRef = ref(null);
-const doLogin = () => {
+const doUpdate = () => {
   // 调用实例方法
   formRef.value.validate(async (valid) => {
     // valid: 所有表单验证都通过才为true
     if (valid) {
       // 发送修改用户信息请求
-      if (true) {
+      const user = {
+        id:loginUserInfo.id,
+        username: form.value.username,
+        introduce: form.value.introduce,
+        image: form.value.image,
+        sex: form.value.sex
+      }
+      const res = await updateUserInfo(user);
+      if (res.code === 1) {
         ElMessage.success("用户信息修改成功")
+        // 重新查询用户信息 把新的信息存入session
+
+        await userStore.storeLoginUserInfo(loginUserInfo.id);
         // 跳转页面
         await router.push("/userHome")
+      } else {
+        ElMessage.error("用户信息修改失败")
       }
     }
   })
 }
 
-// 上传头像
-
+// 判断图片尺寸
 const beforeAvatarUpload = (rawFile) => {
   console.log("进入beforeAvatarUpload")
   if (rawFile.type !== 'image/png' && rawFile.type !== 'image/jpg' && rawFile.type !== 'image/jpeg') {
@@ -63,19 +78,23 @@ const beforeAvatarUpload = (rawFile) => {
 const imageUrl = ref(loginUserInfo.image)
 // 覆盖默认提交行为, 这里可以实现手动提交 item就是一个request请求, 里面携带了item 和请求参数
 // 也可以在里面设置请求头之类的
-// todo 完成的头像图片的提交, 保存到了 后端 并能通过 url访问
-// todo 图片重复问题, 要完成删除图片接口
+//完成的头像图片的提交, 保存到了 后端 并能通过 url访问
 const httpRequest = async (item) => {
   console.log("item: ", item)
   console.log(item.file)
   console.log("进入httpRequest")
   const formData = new FormData();
   formData.append("files", item.file)
-  const res = await uploadImageAPI(formData);
+  // 上传头像 后端已经优化了, 不再保存同样的头像
+  const res = await uploadImageAPI(formData,1);
   console.log(res.data)
-  form.image = res.data
+  form.value.image = res.data
   imageUrl.value = res.data
+
 }
+
+
+
 </script>
 
 <template>
@@ -108,7 +127,7 @@ const httpRequest = async (item) => {
         </el-form-item>
 
         <div class="flex items-center justify-center">
-          <el-button size="large" color="#009eff" @click="doLogin">确认修改</el-button>
+          <el-button size="large" color="#009eff" @click="doUpdate">确认修改</el-button>
         </div>
       </el-form>
 

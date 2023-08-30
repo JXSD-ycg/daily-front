@@ -1,9 +1,14 @@
 import http from "../uitls/http.js";
 
 // 上传文件
-export const uploadImageAPI = (formData) => {
+/**
+ * @param formData
+ * @param type  上传类型  0: 日记图片上传  1: 头像上传
+ * @returns {Promise<axios.AxiosResponse<any>>}
+ */
+export const uploadImageAPI = (formData, type = 0) => {
   return http.postForm(
-    '/common/upload', formData,)
+    `/common/upload/${type}`, formData,)
 }
 
 // 新增或修改日记

@@ -8,9 +8,7 @@ import {getUserAPI} from "../../apis/user.js";
 import UserBox from "./components/UserBox.vue";
 import UserPublicDaily from "./components/UserPublicDaily.vue";
 
-// todo 完成个人页
-
-sessionStorage
+const route = useRoute();
 // 根据用户id查询 改用户下面的所有 public文章
 const list = ref([]);
 const total = ref(0);

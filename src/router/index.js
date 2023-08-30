@@ -1,4 +1,6 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import {ElMessage} from "element-plus";
+import {createRouter, createWebHistory} from 'vue-router'
+import {useUserStore} from "../stores/userStore.js";
 import Layout from '../views/layout/Layout.vue'
 import Home from '../views/home/Home.vue'
 import Person from '../views/person/Person.vue'
@@ -31,12 +33,18 @@ const router = createRouter({
         {
           path: '/userHome',
           name: 'userHome',
-          component: UserHome
+          component: UserHome,
+          meta: {
+            isAuth: true
+          }
         },
         {
           path: '/edit',
           name: 'edit',
-          component: Edit
+          component: Edit,
+          meta: {
+            isAuth: true
+          }
         },
         {
           path: '/login',
@@ -46,7 +54,10 @@ const router = createRouter({
         {
           path: '/account',
           name: 'account',
-          component: Account
+          component: Account,
+          meta: {
+            isAuth: true
+          }
         },
         {
           path: '/admin',
@@ -63,6 +74,29 @@ const router = createRouter({
   ]
 })
 
+// 配置路由导航
+router.beforeEach((to, from, next) => {
+    // 判断资源是否要拦截
+    if (to.matched.some(route => route.meta.isAuth)) {
+      // 如果资源要拦截, 判断是否有token
+      const token = useUserStore().getUserToken()
+      // 如果token存在, 直接放行
+      if (token) {
+        next()
+      } else {
+        // 没有token 跳转登录页
+        ElMessage.warning("请先登录")
+        next({
+          path: "/login"
+        })
+      }
+    } else {
+      // 请求的资源不需要拦截 直接放行
+      next()
+    }
+
+  }
+)
 
 
 export default router

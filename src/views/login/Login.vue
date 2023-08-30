@@ -80,7 +80,6 @@ onMounted(() => getCode())
           <el-input type="password" v-model="form.password"/>
         </el-form-item>
 
-
         <el-form-item class="pl-2 " prop="picCode" label="验证码" label-width="auto">
 
           <div class="flex items-center justify-center  w-2/3">
@@ -96,10 +95,16 @@ onMounted(() => getCode())
 
       </el-form>
 
-    </div>
 
+  </div>
 
 
 </template>
+
+<style >
+ html{
+   scroll-behavior: smooth;
+ }
+</style>
 
 

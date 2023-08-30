@@ -14,7 +14,7 @@ const handleUploadImage = async (event, insertImage, files) => {
     const formData = new FormData();
     formData.append('files', files[i])
     console.log(files[i])
-    const res = await uploadImageAPI(formData);
+    const res = await uploadImageAPI(formData,0);
     console.log(res.data)
     // todo 只需要存放一张图片, 这里只能实现存放最后一张图片 优化为存放第一张图片的url
     imageUrl.value = res.data

@@ -13,11 +13,13 @@ const http = axios.create({
 
 // axios请求拦截器
 http.interceptors.request.use( config => {
-  console.log("本次请求路径 => ",config.url)
+
   // 每次请求携带token
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("Authorization");
+
   if (token) {
     config.headers.Authorization = token;
+
   }
   return config;
 }, e => Promise.reject(e))
