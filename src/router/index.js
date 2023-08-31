@@ -79,7 +79,7 @@ router.beforeEach((to, from, next) => {
     // 判断资源是否要拦截
     if (to.matched.some(route => route.meta.isAuth)) {
       // 如果资源要拦截, 判断是否有token
-      const token = useUserStore().getUserToken()
+      const token = useUserStore().token
       // 如果token存在, 直接放行
       if (token) {
         next()

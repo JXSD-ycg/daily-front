@@ -9,7 +9,6 @@ import {useUserStore} from "../../../stores/userStore.js";
 const route = useRoute();
 
 const userStore = useUserStore();
-// todo 刷新页面 token失效
 // 退出功能
 const confirmEvent = async () => {
   //退出功能

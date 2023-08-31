@@ -5,8 +5,10 @@ import {getUserAPI} from "../apis/user.js";
 
 export const useUserStore = defineStore('user', () => {
 
-  // 存储登录token
-  const token = ref('')
+    // 存储登录token
+    const token = ref('')
+    // 存储登录token
+    const loginUserInfo = ref('')
 
     // 用户登录 登录成功, 将token存入localstorage
     const login = async ({email, password, picCode, codeId}) => {
@@ -14,7 +16,6 @@ export const useUserStore = defineStore('user', () => {
       if (res.code === 1) {
         // 用户登录. 存储 token 和用户 id
         token.value = res.data.token
-        localStorage.setItem("Authorization", res.data.token)
         // 存储登录用户信息
         await storeLoginUserInfo(res.data.id);
         return true;
@@ -26,27 +27,13 @@ export const useUserStore = defineStore('user', () => {
     const storeLoginUserInfo = async (id) => {
       const res = await getUserAPI(id);
       // 存入 sessionStorage
-      token.value = JSON.stringify(res.data)
-      localStorage.setItem("loginUserInfo", JSON.stringify(res.data))
+      loginUserInfo.value = res.data
     }
 
-    // 获取登录用户信息
-    const getLoginUserInfo = () => {
-      return JSON.parse(localStorage.getItem("loginUserInfo"))
+    const logout = () => {
+      token.value = ''
+      loginUserInfo.value = null
     }
-
-  // 获取登录用户token
-  const getUserToken = () => {
-    return localStorage.getItem("Authorization")
-  }
-
-
-
-  const logout = () => {
-    localStorage.removeItem("Authorization")
-    localStorage.removeItem("loginUserInfo")
-    token.value = ''
-  }
 
     function increment() {
 
@@ -55,10 +42,20 @@ export const useUserStore = defineStore('user', () => {
     return {
       login,
       storeLoginUserInfo,
-      getLoginUserInfo,
+      loginUserInfo,
       token,
-      getUserToken,
       logout
     }
   },
+  {
+    persist: {
+      key: "myKey",
+      storage: localStorage,
+      paths: ["token", "loginUserInfo"],
+      serializer: {
+        serialize: JSON.stringify,
+        deserialize: JSON.parse
+      }
+    }
+  }
 )

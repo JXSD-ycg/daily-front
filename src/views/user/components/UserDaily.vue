@@ -8,7 +8,7 @@ import {useUserStore} from "../../../stores/userStore.js";
 
 // 从storage中获取登录用户信息
 const userStore = useUserStore();
-const loginUserInfo = userStore.getLoginUserInfo()
+const loginUserInfo = userStore.loginUserInfo
 
 // 根据用户id查询 改用户下面的所有 public文章
 const list = ref([]);

@@ -9,7 +9,7 @@ import router from "../../router/index.js";
 import {useUserStore} from "../../stores/userStore.js";
 
 const userStore = useUserStore();
-const loginUserInfo = userStore.getLoginUserInfo()
+const loginUserInfo = userStore.loginUserInfo
 
 const form = ref({
   username: loginUserInfo.username,
@@ -51,8 +51,7 @@ const doUpdate = () => {
       if (res.code === 1) {
         ElMessage.success("用户信息修改成功")
         // 重新查询用户信息 把新的信息存入session
-
-        await userStore.storeLoginUserInfo(loginUserInfo.id);
+        userStore.loginUserInfo = res.data
         // 跳转页面
         await router.push("/userHome")
       } else {

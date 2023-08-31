@@ -16,14 +16,18 @@ import Prism from 'prismjs';
 import createEmojiPlugin from '@kangc/v-md-editor/lib/plugins/emoji/index';
 import '@kangc/v-md-editor/lib/plugins/emoji/emoji.css';
 
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+
+const app = createApp(App)
+const pinia = createPinia()
+pinia.use(piniaPluginPersistedstate)
+
 
 VueMarkdownEditor.use(vuepressTheme, {
   Prism,
 });
 // 导入表情包组件
 VueMarkdownEditor.use(createEmojiPlugin());
-
-const app = createApp(App)
 
 // 引入markdown编辑器
 app.use(VueMarkdownEditor);

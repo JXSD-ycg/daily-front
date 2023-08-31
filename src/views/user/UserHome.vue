@@ -10,7 +10,7 @@ import UserDaily from "./components/UserDaily.vue";
 
 // 从storage中获取登录用户信息
 const userStore = useUserStore();
-const loginUserInfo = userStore.getLoginUserInfo()
+const loginUserInfo = userStore.loginUserInfo
 
 </script>
 
