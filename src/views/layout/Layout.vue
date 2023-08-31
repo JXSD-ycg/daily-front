@@ -5,16 +5,14 @@ import LayoutHeader from "./components/LayoutHeader.vue";
 </script>
 
 <template>
-  <div class="flew flex-col max-h-fit">
-
+  <div class="flew flex-col max-h-fit" >
     <el-affix :offset="0">
-      <div class="z-auto  top-0 fixed w-full right-0 flex justify-center header-color shadow-gray-50 shadow-lg">
+      <div class="z-50  top-0 fixed w-full right-0 flex justify-center header-color shadow-gray-50 shadow-lg">
         <LayoutHeader></LayoutHeader>
       </div>
     </el-affix>
 
-
-      <div class="z-0 mt-20 w-full flex items-center justify-center">
+      <div class="z-40 mt-20 w-full flex items-center justify-center">
         <transition>
           <router-view></router-view>
         </transition>

@@ -2,7 +2,7 @@
 import {ElMessage} from "element-plus";
 import {onMounted, ref} from "vue";
 import {useRoute} from "vue-router";
-import {addDailyAPI, getOneDailyAPI, updateDailyInfoAPI, uploadImageAPI} from "../../apis/edit.js";
+import {addDailyAPI, deleteImagerAPI, getOneDailyAPI, updateDailyInfoAPI, uploadImageAPI} from "../../apis/edit.js";
 import router from "../../router/index.js";
 import {useUserStore} from "../../stores/userStore.js";
 
@@ -140,6 +140,68 @@ onMounted(() => {
   }
 })
 
+// 上传图片展示的列表
+const uploadList = ref([])
+// 存储图片 url 的列表
+const imageList = ref([])
+// 判断图片尺寸
+const beforeAvatarUpload = (rawFile) => {
+  if (uploadList.value.length >= 3) {
+    ElMessage.warning("一篇日记最多上传3张图片")
+    return false
+  }
+  console.log("进入beforeAvatarUpload")
+  if (rawFile.type !== 'image/png' && rawFile.type !== 'image/jpg' && rawFile.type !== 'image/jpeg') {
+    ElMessage.error('头像仅支持jpg、jpeg、png格式!')
+    return false
+  } else if (rawFile.size / 1024 / 1024 > 2) {
+    ElMessage.error('图片大小不能超过2M!')
+    return false
+  }
+  return true
+}
+
+// 覆盖默认提交行为, 这里可以实现手动提交 item就是一个request请求, 里面携带了item 和请求参数
+// 也可以在里面设置请求头之类的
+//完成的头像图片的提交, 保存到了 后端 并能通过 url访问
+const httpRequest = async (item) => {
+  console.log("item.file的uid: " ,item.file.uid)
+  console.log("进入httpRequest")
+  const formData = new FormData();
+  formData.append("files", item.file)
+  // 上传日记图片
+  const res = await uploadImageAPI(formData,0);
+  console.log("后端返回的 图片URL: ", res.data.imageUrl)
+  imageList.value.push({
+    uid: item.file.uid,
+    // 数据库存储id
+    id:res.data.id,
+    url:res.data.imageUrl})
+
+}
+const handleRemove = async (file, files) => {
+  // todo 完成删除图片功能
+  const removeItem = imageList.value.filter(item => item.uid === file.raw.uid)[0]
+  console.log("移除文件 文件的url ", removeItem)
+  console.log("移除文件 id ", removeItem.id)
+  console.log("移除文件 文件的urll ", removeItem.url)
+  const data = {
+    id: removeItem.id,
+    url :  removeItem.url,
+    type: 0
+  }
+  // 发送请求  删除图片 参数 url type
+  const res = await deleteImagerAPI(data);
+  if (res.code === 1) {
+    ElMessage.success("删除成功")
+    // 删除 imageList中的 值
+    imageList.value = imageList.value.filter(item => item.uid !== file.raw.uid)
+  } else {
+    ElMessage.success("服务错误")
+  }
+
+}
+
 </script>
 
 <template>
@@ -188,15 +250,37 @@ onMounted(() => {
 
     <div class="mx-auto w-full min-h-fit ">
       <v-md-editor
-          left-toolbar="undo redo clear | h bold italic strikethrough quote | ul ol table hr | link image code | save | emoji"
+          left-toolbar="undo redo clear | h bold italic strikethrough quote | ul ol table hr | link  code | save | emoji"
           mode="editable"
           height="30rem"
           v-model="text"
-          :disabled-menus="[]"
           @upload-image="handleUploadImage"
       >
       </v-md-editor>
     </div>
+
+    <div>
+      {{imageList}}
+      <el-upload
+          v-model:file-list="uploadList"
+          class="upload-demo"
+          :limit="3"
+          action=""
+          :on-remove="handleRemove"
+          :http-request="httpRequest"
+          :before-upload="beforeAvatarUpload"
+          accept="image/jpg, image/jpeg, image/png"
+          list-type="picture"
+      >
+        <el-button type="primary">点击上传图片</el-button>
+        <template #tip>
+          <div class="el-upload__tip">
+            可接收 jpg/png/jpeg格式, 大小不超过2M
+          </div>
+        </template>
+      </el-upload>
+    </div>
+
 
     <div>
       <span class="flex items-center">

@@ -4,7 +4,7 @@ import 'element-plus/es/components/message/style/css'
 import {ElMessage} from "element-plus";
 import {onMounted, ref} from 'vue'
 import {updateUserInfo} from "../../apis/account.js";
-import {uploadImageAPI} from "../../apis/edit.js";
+import {deleteImagerAPI, uploadImageAPI} from "../../apis/edit.js";
 import router from "../../router/index.js";
 import {useUserStore} from "../../stores/userStore.js";
 
@@ -74,6 +74,7 @@ const beforeAvatarUpload = (rawFile) => {
   return true
 }
 
+// 用来展示用户的头像
 const imageUrl = ref(loginUserInfo.image)
 // 覆盖默认提交行为, 这里可以实现手动提交 item就是一个request请求, 里面携带了item 和请求参数
 // 也可以在里面设置请求头之类的
@@ -87,11 +88,10 @@ const httpRequest = async (item) => {
   // 上传头像 后端已经优化了, 不再保存同样的头像
   const res = await uploadImageAPI(formData,1);
   console.log(res.data)
-  form.value.image = res.data
-  imageUrl.value = res.data
+  form.value.image = res.data.imageUrl
+  imageUrl.value = res.data.imageUrl
 
 }
-
 
 
 </script>

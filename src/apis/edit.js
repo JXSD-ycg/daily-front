@@ -37,3 +37,15 @@ export const updateDailyInfoAPI = (data) => {
     }
   )
 }
+
+/**
+ * 删除 图片
+ * @returns {*}
+ */
+export const deleteImagerAPI = (data) => {
+  return http({
+    url: `/common/delete`,
+    method:'delete',
+    data
+  })
+}
