@@ -9,6 +9,7 @@ import {useUserStore} from "../../../stores/userStore.js";
 const route = useRoute();
 
 const userStore = useUserStore();
+const token = userStore.token
 // 退出功能
 const confirmEvent = async () => {
   //退出功能
@@ -44,18 +45,17 @@ const confirmEvent = async () => {
           开始日记
         </router-link>
 
-        <div v-if="userStore.token" >
-          <router-link :class="{active: route.name === 'userHome'}" class="hover:border-b-2 "
-                       to="/userHome">
-            个人主页
-          </router-link>
-
+        <div v-if="token" >
+        <router-link :class="{active: route.name === 'userHome'}" class="hover:border-b-2 "
+                     to="/userHome">
+          个人主页
+        </router-link>
         </div>
 
       </div>
     </div>
 
-    <div>
+    <div >
       <div v-if="!userStore.token" class="flex items-center space-x-5">
         <div class="">
           <router-link :class="{active: route.name === 'login'}" class="hover:border-b-2" to="/login">

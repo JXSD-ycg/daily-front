@@ -98,7 +98,7 @@ const httpRequest = async (item) => {
 
 <template>
 
-  <div class="w-2/3">
+  <div class=" w-2/3">
     <div class="total-text-color font-semibold text-3xl pb-3 border-b-2 border-blue-50 ">
       <div>账号设置</div>
     </div>

@@ -39,12 +39,10 @@ const doLogin = () => {
     // valid: 所有表单验证都通过才为true
     if (valid) {
       // 发送登录请求
-      if (userStore.login({email, password, picCode, codeId})) {
+      if (await userStore.login({email, password, picCode, codeId})) {
         ElMessage.success("登录成功")
         // 跳转页面
         await router.push("/")
-      } else {
-        ElMessage.error("登录失败")
       }
     }
   })

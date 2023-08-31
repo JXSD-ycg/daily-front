@@ -4,6 +4,7 @@ import {onMounted, ref} from "vue";
 import {useRoute} from "vue-router";
 import {addDailyAPI, getOneDailyAPI, updateDailyInfoAPI, uploadImageAPI} from "../../apis/edit.js";
 import router from "../../router/index.js";
+import {useUserStore} from "../../stores/userStore.js";
 
 const imageUrl = ref('');
 
@@ -57,7 +58,7 @@ const place = ref('')
 const isPublic = ref('0')
 const views = ref(0)
 const likes = ref(0)
-const loginUserInfo = JSON.parse(sessionStorage.getItem("loginUserInfo"));
+const loginUserInfo = useUserStore().loginUserInfo;
 // 发送日记
 const addDaily = async () => {
   // 先校验参数
@@ -149,7 +150,7 @@ onMounted(() => {
       <div v-else>开始记录你的今天吧</div>
     </div>
 
-    <div>
+    <div class="z-0">
       <el-select v-model="book" class="w-1/4" placeholder="默认日记" size="default">
         <el-option
             v-for="item in options"

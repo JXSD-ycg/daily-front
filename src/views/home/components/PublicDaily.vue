@@ -5,7 +5,9 @@ import {getPublicDailyAPI} from "../../../apis/home.js";
 import DailyCard from "../../../components/DailyCard.vue";
 
 //存放日记内容
-const list = ref([]);
+const list = ref([
+
+]);
 const total = ref(0);
 
 
@@ -26,7 +28,6 @@ onMounted(() => getPublicDaily())
 </script>
 
 <template>
-
   <div class="flex-col items-center py-3" v-for="daily in list" :key="daily.id">
     <DailyCard  :daily="daily" :isPerson="false"></DailyCard>
   </div>

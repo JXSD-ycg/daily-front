@@ -1,5 +1,6 @@
 import axios from "axios";
 import {ElMessage} from "element-plus";
+import {useUserStore} from "../stores/userStore.js";
 
 const http = axios.create({
   // cofig 中配置基础url
@@ -15,8 +16,7 @@ const http = axios.create({
 http.interceptors.request.use( config => {
 
   // 每次请求携带token
-  const token = localStorage.getItem("Authorization");
-
+  const token = useUserStore().token
   if (token) {
     config.headers.Authorization = token;
 

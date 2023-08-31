@@ -1,3 +1,4 @@
+import {ElMessage} from "element-plus";
 import {ref, computed} from 'vue'
 import {defineStore} from 'pinia'
 import {loginAPI} from "../apis/login.js";
@@ -8,7 +9,7 @@ export const useUserStore = defineStore('user', () => {
     // 存储登录token
     const token = ref('')
     // 存储登录token
-    const loginUserInfo = ref('')
+    const loginUserInfo = ref({})
 
     // 用户登录 登录成功, 将token存入localstorage
     const login = async ({email, password, picCode, codeId}) => {
@@ -20,6 +21,7 @@ export const useUserStore = defineStore('user', () => {
         await storeLoginUserInfo(res.data.id);
         return true;
       }
+      ElMessage.error(res.msg)
       return false;
     }
 
@@ -51,11 +53,11 @@ export const useUserStore = defineStore('user', () => {
     persist: {
       key: "myKey",
       storage: localStorage,
-      paths: ["token", "loginUserInfo"],
+      // paths: ["token", "loginUserInfo"],
       serializer: {
+        deserialize: JSON.parse,
         serialize: JSON.stringify,
-        deserialize: JSON.parse
-      }
+      },
     }
   }
 )

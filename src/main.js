@@ -22,7 +22,6 @@ const app = createApp(App)
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
 
-
 VueMarkdownEditor.use(vuepressTheme, {
   Prism,
 });
@@ -31,7 +30,7 @@ VueMarkdownEditor.use(createEmojiPlugin());
 
 // 引入markdown编辑器
 app.use(VueMarkdownEditor);
-app.use(createPinia())
+app.use(pinia)
 app.use(router)
 
 app.mount('#app')
