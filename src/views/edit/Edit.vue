@@ -8,28 +8,6 @@ import {useUserStore} from "../../stores/userStore.js";
 
 const imageUrl = ref('');
 
-// files是一个数组  里面存着一个一个file 将file取出封装为formData
-const handleUploadImage = async (event, insertImage, files) => {
-  // 拿到 files 之后上传到文件服务器，然后向编辑框中插入对应的内容
-  for (let i = 0; i < files.length; i++) {
-    const formData = new FormData();
-    formData.append('files', files[i])
-    console.log(files[i])
-    const res = await uploadImageAPI(formData,0);
-    console.log(res.data)
-    // todo 只需要存放一张图片, 这里只能实现存放最后一张图片 优化为存放第一张图片的url
-    imageUrl.value = res.data
-    // 后端返回图片url, 然后插入进去即可
-    insertImage({
-      url:
-      res.data,
-      desc: files[i]?.getName,
-      // width: 'auto',
-      // height: 'auto',
-    });
-  }
-}
-
 // 这里要根据 用户 id 查询用户的日记本
 const options = [
   {
@@ -76,8 +54,8 @@ const addDaily = async () => {
     "place": place.value,
     "content": text.value,
     "isPublic": isPublic.value,
-    // 页面展示只要存放一张图片
-    "image": imageUrl.value,
+    // 页面展示只要存放一张图片 todo 展示页面
+    "image":JSON.stringify(imageList.value.map(item => item.id)),
     "views": views.value,
     "likes": likes.value,
   }
@@ -103,6 +81,9 @@ const getOneDaily = async () => {
     isPublic.value = res.data.isPublic+ ""
     mood.value = res.data.mood
     weather.value = res.data.weather
+    // 这里后端 返回 图片url 列表  包括图片id 图片name 和图片url 返回的是字符串 要解析一下
+    imageList.value =  JSON.parse(res.data.image)
+    uploadList.value =  JSON.parse(res.data.image)
     place.value = res.data.place
     views.value = res.data.views
     likes.value = res.data.likes
@@ -122,8 +103,8 @@ const updateDailyInfo = async () => {
     "place": place.value,
     "content": text.value,
     "isPublic": isPublic.value,
-    // 页面展示只要存放一张图片
-    "image": imageUrl.value,
+    // 页面展示只要存放一张图片  image 存储的是 图片id
+    "image": JSON.stringify(imageList.value.map(item => item.id)),
     "views":  views.value,
     "likes": likes.value,
   }
@@ -140,14 +121,15 @@ onMounted(() => {
   }
 })
 
-// 上传图片展示的列表
+// 上传图片组件展示的列表
 const uploadList = ref([])
 // 存储图片 url 的列表
 const imageList = ref([])
 // 判断图片尺寸
-const beforeAvatarUpload = (rawFile) => {
-  if (uploadList.value.length >= 3) {
+const beforeUpload = (rawFile) => {
+  if (imageList.value.length >= 3) {
     ElMessage.warning("一篇日记最多上传3张图片")
+    console.log("一篇日记最多上传3张图片")
     return false
   }
   console.log("进入beforeAvatarUpload")
@@ -173,18 +155,19 @@ const httpRequest = async (item) => {
   const res = await uploadImageAPI(formData,0);
   console.log("后端返回的 图片URL: ", res.data.imageUrl)
   imageList.value.push({
-    uid: item.file.uid,
+    name: item.file.name,
     // 数据库存储id
     id:res.data.id,
     url:res.data.imageUrl})
 
 }
 const handleRemove = async (file, files) => {
+  console.log(file.raw)
   // todo 完成删除图片功能
-  const removeItem = imageList.value.filter(item => item.uid === file.raw.uid)[0]
+  const removeItem = imageList.value.filter(item => item.name === file.raw.name)[0]
   console.log("移除文件 文件的url ", removeItem)
   console.log("移除文件 id ", removeItem.id)
-  console.log("移除文件 文件的urll ", removeItem.url)
+  console.log("移除文件 文件的url ", removeItem.url)
   const data = {
     id: removeItem.id,
     url :  removeItem.url,
@@ -195,11 +178,19 @@ const handleRemove = async (file, files) => {
   if (res.code === 1) {
     ElMessage.success("删除成功")
     // 删除 imageList中的 值
-    imageList.value = imageList.value.filter(item => item.uid !== file.raw.uid)
+    imageList.value = imageList.value.filter(item => item.name !== file.raw.name)
   } else {
     ElMessage.success("服务错误")
   }
+}
 
+// 图片预览
+const dialogImageUrl = ref('')
+const dialogVisible = ref(false)
+
+const handlePictureCardPreview = (uploadFile) => {
+  dialogImageUrl.value = uploadFile.url
+  dialogVisible.value = true
 }
 
 </script>
@@ -254,25 +245,23 @@ const handleRemove = async (file, files) => {
           mode="editable"
           height="30rem"
           v-model="text"
-          @upload-image="handleUploadImage"
       >
       </v-md-editor>
     </div>
 
     <div>
-      {{imageList}}
       <el-upload
           v-model:file-list="uploadList"
           class="upload-demo"
-          :limit="3"
           action=""
           :on-remove="handleRemove"
           :http-request="httpRequest"
-          :before-upload="beforeAvatarUpload"
+          :before-upload="beforeUpload"
+          :on-preview="handlePictureCardPreview"
           accept="image/jpg, image/jpeg, image/png"
-          list-type="picture"
+          list-type="picture-card"
       >
-        <el-button type="primary">点击上传图片</el-button>
+        <el-button type="primary">上传图片</el-button>
         <template #tip>
           <div class="el-upload__tip">
             可接收 jpg/png/jpeg格式, 大小不超过2M
@@ -280,8 +269,9 @@ const handleRemove = async (file, files) => {
         </template>
       </el-upload>
     </div>
-
-
+    <el-dialog v-model="dialogVisible">
+      <img class="w-2/3 h-2/3 mx-auto my-auto" :src="dialogImageUrl" alt="Preview Image" />
+    </el-dialog>
     <div>
       <span class="flex items-center">
          <div class="w-28">陌生人能看吗?</div>

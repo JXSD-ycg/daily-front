@@ -14,7 +14,7 @@ defineProps({
 <template>
   <div>
     <div class="bg-gray-100 min-h-full w-5/6 mx-4 px-5 pb-5 space-y-2">
-      <img class="pt-7 pb-4 w-15 h-15" :src="user.image">
+      <img class="pt-7 pb-4 w-15 h-15 " :src="user.image">
       <span class=" text-sm">{{user.username}} 于 {{new Date(user.createTime).toLocaleDateString()}} 加入</span>
       <div >
         <p class="">自我介绍:</p>

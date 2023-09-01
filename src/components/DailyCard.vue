@@ -1,5 +1,5 @@
 <script setup>
-import {defineProps, onMounted, ref} from "vue";
+import {defineProps} from "vue";
 
 
 defineProps({
@@ -19,7 +19,6 @@ defineProps({
 </script>
 
 <template>
-
     <div class="px-2 py-3 ">
       <div class="flex flex-col items-center space-y-1">
         <div class="flex items-center self-start">
@@ -49,7 +48,8 @@ defineProps({
 
         <div class="w-full flex items-center py-1">
           <p class=" flex items-center w-4/5 leading-loose self-start pl-1 pr-5 indent-5">  {{ daily.content }}   </p>
-          <img class=" w-24 h-24 w-1/4 self-start" :src="daily.image">
+          <img class=" w-24 h-24 w-1/4 self-start" :src="JSON.parse(daily.image)[0]?.url">
+
         </div>
 
         <div class="flex self-start items-center w-3/4 justify-between ">
