@@ -10,6 +10,7 @@ import Admin from '../views/admin/Admin.vue'
 import Register from '../views/register/Register.vue'
 import UserHome from '../views/user/UserHome.vue'
 import Account from '../views/account/Account.vue'
+import DailyDetail from '../components/DailyDetail.vue'
 
 
 const router = createRouter({
@@ -62,7 +63,12 @@ const router = createRouter({
         {
           path: '/admin',
           name: 'admin',
-          component: Admin
+          component: Admin// todo 管理端
+        },
+        {
+          path: '/detail/:id',
+          name: 'detail',
+          component: DailyDetail// todo 管理端
         },
         {
           path: '/register',
@@ -71,8 +77,14 @@ const router = createRouter({
         }
       ]
     },
-  ]
+  ],
+  scrollBehavior() {
+    return {
+      top: 0
+    }
+  }
 })
+
 
 // 配置路由导航
 router.beforeEach((to, from, next) => {

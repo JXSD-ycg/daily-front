@@ -1,7 +1,7 @@
 <script setup>
 import PublicDaily from "./components/PublicDaily.vue";
 import Total from "./components/Total.vue";
-import Hot from "./components/Hot.vue";
+import News from "./components/News.vue";
 import Time from "./components/Time.vue";
 
 
@@ -24,8 +24,7 @@ import Time from "./components/Time.vue";
   </div>
   <div class="w-1/3 pl-6 self-start pt-10 flex-col ">
       <Time class="mb-5" ></Time>
-    最新
-      <Hot></Hot>
+      <News></News>
 
   </div>
 

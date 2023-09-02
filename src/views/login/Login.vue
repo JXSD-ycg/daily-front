@@ -80,9 +80,12 @@ onMounted(() => getCode())
 
         <el-form-item class="pl-2 " prop="picCode" label="验证码" label-width="auto">
 
-          <div class="flex items-center justify-center  w-2/3">
-            <el-input class="pr-3" v-model="form.picCode"/>
-            <img class="pl-2 h-10 w-20" :src="codeData">
+          <div class="flex items-center justify-center ">
+            <el-input class="pr-3 w-2/3" v-model="form.picCode"/>
+            <img class="px-2 h-10 w-1/3 " :src="codeData">
+            <a href="#" @click="getCode" class="px-2 h-10 w-full flex items-center text-blue-500 underline ">
+              <span >看不清?</span>
+            </a>
 
           </div>
         </el-form-item>

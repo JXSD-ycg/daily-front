@@ -18,6 +18,7 @@ import '@kangc/v-md-editor/lib/plugins/emoji/emoji.css';
 
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
+
 const app = createApp(App)
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
@@ -30,6 +31,7 @@ VueMarkdownEditor.use(createEmojiPlugin());
 
 // 引入markdown编辑器
 app.use(VueMarkdownEditor);
+
 app.use(pinia)
 app.use(router)
 

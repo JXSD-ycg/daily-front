@@ -212,7 +212,7 @@ const handlePictureCardPreview = (uploadFile) => {
             :value="item.value"
         />
       </el-select>
-      <a href="#" class="text-sky-600 px-2">管理我的日记本</a>
+      <a href="#" class="text-sky-600 px-2">管理我的日记本(未开发)</a>
     </div>
 
 

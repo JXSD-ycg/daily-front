@@ -1,5 +1,6 @@
 <script setup>
 import {defineProps} from "vue";
+import {useRouter} from "vue-router";
 
 
 defineProps({
@@ -14,6 +15,8 @@ defineProps({
     type: Boolean,
   }
 });
+// todo 完成详情页
+const router = useRouter();
 
 
 </script>
@@ -39,15 +42,15 @@ defineProps({
           </router-link>
 
           <span class="text-gray-500">
-           [{{ daily.bookTitle === 'default' ? '默认' : daily.bookTitle }} 日记]
+           [{{ daily.bookTitle === 'default' ? '默认' : daily.bookTitle }}]
         [天气: {{daily.weather}}]
-        [心情: {{daily.mood}}}]
+        [心情: {{daily.mood}}]
         [地点: {{daily.place}}]
         </span>
         </div>
 
         <div class="w-full flex items-center py-1">
-          <p class=" flex items-center w-4/5 leading-loose self-start pl-1 pr-5 indent-5">  {{ daily.content }}   </p>
+          <p @click="router.push(`/detail/${daily.id}`)" class="cursor-pointer flex items-center w-4/5 leading-loose self-start pl-1 pr-5 indent-5">  {{ daily.content }}   </p>
           <img class=" w-24 h-24 w-1/4 self-start" :src="JSON.parse(daily.image)[0]?.url">
 
         </div>

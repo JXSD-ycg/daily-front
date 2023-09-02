@@ -45,13 +45,12 @@ const confirmEvent = async () => {
           开始日记
         </router-link>
 
-        <div v-if="token" >
+        <div v-if="userStore.token" >
         <router-link :class="{active: route.name === 'userHome'}" class="hover:border-b-2 "
                      to="/userHome">
           个人主页
         </router-link>
         </div>
-
       </div>
     </div>
 
