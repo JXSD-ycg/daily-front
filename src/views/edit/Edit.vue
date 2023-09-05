@@ -162,7 +162,7 @@ const httpRequest = async (item) => {
 
 }
 const handleRemove = async (file, files) => {
-  console.log(file.raw)
+  console.log("handleRemove的file:", file)
   // todo 完成删除图片功能
   const removeItem = imageList.value.filter(item => item.name === file.raw.name)[0]
   console.log("移除文件 文件的url ", removeItem)

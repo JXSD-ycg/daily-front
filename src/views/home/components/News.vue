@@ -26,7 +26,7 @@ onMounted(() => getFinance())
 </script>
 
 <template>
-  <div class="px-2  text-2xl text-blue-400 font-semibold py-3 flex items-center justify-center">
+  <div class="px-2 text-2xl text-blue-400 font-semibold py-3 flex items-center justify-center">
     <span class="">财经新闻</span>
     <div class="pl-5">
       <el-tooltip

@@ -11,6 +11,7 @@ import Register from '../views/register/Register.vue'
 import UserHome from '../views/user/UserHome.vue'
 import Account from '../views/account/Account.vue'
 import DailyDetail from '../components/DailyDetail.vue'
+import Forget from '../views/forget/Forget.vue'
 
 
 const router = createRouter({
@@ -74,6 +75,11 @@ const router = createRouter({
           path: '/register',
           name: 'register',
           component: Register
+        },
+        {
+          path: '/forget',
+          name: 'forget',
+          component: Forget
         }
       ]
     },

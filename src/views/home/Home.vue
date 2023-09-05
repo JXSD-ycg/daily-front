@@ -9,7 +9,7 @@ import Time from "./components/Time.vue";
 
 <template>
 
-<div class="flex items-center w-3/4 justify-between">
+<div class="flex w-3/4 justify-between">
 
   <div class="w-2/3">
     <div>

@@ -16,7 +16,6 @@ const getSentence = async () => {
 
 const changeSentence = () => {
   if (i.value === 9) {
-    getSentence()
     i.value = 0
   } else {
     i.value++

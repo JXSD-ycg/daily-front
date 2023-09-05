@@ -86,10 +86,17 @@ onMounted(() => getCode())
             <a href="#" @click="getCode" class="px-2 h-10 w-full flex items-center text-blue-500 underline ">
               <span >看不清?</span>
             </a>
-
           </div>
         </el-form-item>
 
+        <div class="flex items-center justify-around pb-2 px-10 ">
+          <router-link to="/forget">
+            <a href="#" class="underline text-blue-500">忘记密码?</a>
+          </router-link>
+          <router-link to="/register">
+            <a href="#" class="underline text-blue-500">还没有账号?</a>
+          </router-link>
+        </div>
         <div class="flex items-center justify-center">
           <el-button size="large" color="#009eff" @click="doLogin">登录</el-button>
         </div>

@@ -88,10 +88,16 @@ const sentMailCode = async () => {
           console.log(form.value.email)
           console.log('邮箱校验成功, 发送验证码')
           // 发送验证码
-          const res = await sentCodeAPI(form.value.email);
+          const res = await sentCodeAPI(form.value.email,0);
           if (res.code === 1) {
             ElMessage.success({
               message: "发送邮箱成功, 请前往邮箱查看验证码",
+              duration: 5000,
+            })
+          } else if (res.code === 2) {
+            ElMessage.warning(
+            {
+              message: "邮箱已注册, 请登录",
               duration: 5000,
             })
           }
